@@ -1,0 +1,11 @@
+# Ignorar entornos virtuales
+venv/
+env/
+
+# Ignorar archivos temporales de Python y Jupyter
+__pycache__/
+.ipynb_checkpoints/
+
+# Ignorar la base de datos MUSAN y los audios generados
+musan/
+data/processed/*.wav
