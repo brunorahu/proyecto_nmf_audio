@@ -25,6 +25,7 @@ Referencia: Lee & Seung (1999). Nature, 401(6755), 788-791.
 
 Estructura del Proyecto
 -----------------------
+```
 PROYECTO_NMF_AUDIO/
     BCGD/
         algoritmoBCGDUnificado.py   Algoritmo 1: BCGD unificado (GD, Momentum, Nesterov)
@@ -43,7 +44,7 @@ PROYECTO_NMF_AUDIO/
         03_experimentos_visualizacionV1.ipynb   Experimentos por k y graficas
         EDA.ipynb                   Analisis exploratorio de datos
 
-
+```
 Requisitos
 ----------
 Python 3.9 o superior.
