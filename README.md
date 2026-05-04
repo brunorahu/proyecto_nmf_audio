@@ -164,7 +164,8 @@ beta                0.9             0.9
 lambda              0.0             0 para Audio NMF
 proj                max(x, 0)       max(x, 0) para NMF
 
-
+```
+```
 Resultados Principales
 ----------------------
 Comparacion de optimizadores con k=10, 150 iteraciones:
@@ -182,7 +183,7 @@ Seleccion de hiperparametro k por RMSE val (Nesterov):
     k=20  RMSE val: 1.13  <- optimo seleccionado
 
 El modelo final usa Nesterov con k=20.
-
+```
 
 Notas Tecnicas
 --------------
