@@ -5,9 +5,9 @@ Optimizacion Matemática  - Cuarto Semestre - 04 de Mayo 2026
 
 Autores
 -------
-Diego de Jesus Munoz Gonzalez
-Alexander Gongora Venegas
-Bruno Gael Ramos Huerta
+Diego de Jesus Munoz Gonzalez,
+Alexander Gongora Venegas,
+Bruno Gael Ramos Huerta,
 Julio Alfonso Rangel Ortiz
 
 
