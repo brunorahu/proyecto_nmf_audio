@@ -64,6 +64,7 @@ Se recomienda usar un entorno virtual:
 
 Como Correr el Proyecto (pipeline completo)
 -------------------------------------------
+```
 Desde la carpeta notebooks/, ejecutar:
 
     python main.py
@@ -99,6 +100,7 @@ El script corre todo el pipeline de principio a fin sin intervencion manual:
         Toma el mejor modelo (por RMSE val) y reconstruye el audio via iSTFT.
         Guarda audio_separado.wav en data/processed/.
 ```
+```
 Archivos generados en data/processed/ al terminar:
     X_train.npy, X_val.npy, X_test.npy, X_phase.npy
     W_best.npy, H_train_best.npy, H_val_best.npy, H_test_best.npy
@@ -111,7 +113,7 @@ Archivos generados en data/processed/ al terminar:
 
 Descripcion de Archivos
 -----------------------
-
+```
 algoritmoBCGDUnificado.py
     Contiene bcgd_matrix_factorization(), que implementa el Algoritmo 1 completo.
     Soporta los tres metodos de optimizacion: gd, momentum y nesterov.
@@ -150,7 +152,8 @@ main.py
     Punto de entrada unico. Ejecuta los cuatro bloques en orden e imprime
     el progreso en consola. No requiere argumentos.
 
-
+```
+```
 Parametros del Modelo
 ---------------------
 Parametro           Valor usado     Rango recomendado (enunciado)
@@ -163,8 +166,8 @@ alpha (Nesterov)    1e-5            reducir si diverge
 beta                0.9             0.9
 lambda              0.0             0 para Audio NMF
 proj                max(x, 0)       max(x, 0) para NMF
-
-
+```
+```
 
 Resultados Principales
 ----------------------
@@ -183,7 +186,7 @@ Seleccion de hiperparametro k por RMSE val (Nesterov):
     k=20  RMSE val: 1.13  <- optimo seleccionado
 
 El modelo final usa Nesterov con k=20.
-
+```
 
 Notas Tecnicas
 --------------
