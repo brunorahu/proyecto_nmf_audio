@@ -149,7 +149,7 @@ evaluacion_pruebas.py
 main.py
     Punto de entrada unico. Ejecuta los cuatro bloques en orden e imprime
     el progreso en consola. No requiere argumentos.
-
+```
 ```
 Parametros del Modelo
 ---------------------
@@ -164,8 +164,8 @@ beta                0.9             0.9
 lambda              0.0             0 para Audio NMF
 proj                max(x, 0)       max(x, 0) para NMF
 
-```
-```
+
+
 Resultados Principales
 ----------------------
 Comparacion de optimizadores con k=10, 150 iteraciones:
