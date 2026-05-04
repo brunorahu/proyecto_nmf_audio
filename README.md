@@ -98,7 +98,7 @@ El script corre todo el pipeline de principio a fin sin intervencion manual:
     Bloque 4 - Reconstruccion de audio
         Toma el mejor modelo (por RMSE val) y reconstruye el audio via iSTFT.
         Guarda audio_separado.wav en data/processed/.
-
+```
 Archivos generados en data/processed/ al terminar:
     X_train.npy, X_val.npy, X_test.npy, X_phase.npy
     W_best.npy, H_train_best.npy, H_val_best.npy, H_test_best.npy
@@ -107,7 +107,7 @@ Archivos generados en data/processed/ al terminar:
     loss_gd.npy, loss_momentum.npy, loss_nesterov.npy
     mix_output.wav, prueba_reconstruccion.wav, audio_separado.wav
     loss_vs_iter.png, bases_activaciones.png, rmse_val_vs_k.png
-
+```
 
 Descripcion de Archivos
 -----------------------
