@@ -1,7 +1,7 @@
 Proyecto C: Separacion de Fuentes de Audio mediante NMF y BCGD
 ==============================================================
 
-Optimizacion Numerica - Cuarto Semestre - Mayo 2026
+Optimizacion Matemática  - Cuarto Semestre - 04 de Mayo 2026
 
 Autores
 -------
