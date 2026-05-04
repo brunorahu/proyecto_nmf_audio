@@ -111,7 +111,7 @@ Archivos generados en data/processed/ al terminar:
 
 Descripcion de Archivos
 -----------------------
-```
+
 algoritmoBCGDUnificado.py
     Contiene bcgd_matrix_factorization(), que implementa el Algoritmo 1 completo.
     Soporta los tres metodos de optimizacion: gd, momentum y nesterov.
@@ -149,8 +149,8 @@ evaluacion_pruebas.py
 main.py
     Punto de entrada unico. Ejecuta los cuatro bloques en orden e imprime
     el progreso en consola. No requiere argumentos.
-```
-```
+
+
 Parametros del Modelo
 ---------------------
 Parametro           Valor usado     Rango recomendado (enunciado)
@@ -183,7 +183,7 @@ Seleccion de hiperparametro k por RMSE val (Nesterov):
     k=20  RMSE val: 1.13  <- optimo seleccionado
 
 El modelo final usa Nesterov con k=20.
-```
+
 
 Notas Tecnicas
 --------------
