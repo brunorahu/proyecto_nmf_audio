@@ -1,52 +1,37 @@
 """
 main.py — Pipeline completo: Proyecto C Audio NMF
-==================================================
-Corre todo el proyecto de principio a fin con un solo comando:
-
-    python main.py
-
-Estructura de carpetas esperada:
-    PROYECTO_NMF_AUDIO/
-        BCGD/
-            algoritmoBCGDUnificado.py
-        data/
-            raw/
-                ejemplo_voz.wav
-                ejemplo_ruido.wav
-            processed/          ← se crea automáticamente
-        notebooks/
-            main.py             ← este archivo
+Corre todo el proyecto de principio a fin con un solo comando
 """
 
-import os
+import os # Para que las rutas de las carpetas funcionen igual en Windows, Mac o Linux
 import sys
 import numpy as np
 import matplotlib
-matplotlib.use("Agg")           # Guardar figuras sin necesitar pantalla
+matplotlib.use("Agg") # Para que guarde las gráficas directo como foto y no me abra ventanas
 import matplotlib.pyplot as plt
 import seaborn as sns
 import librosa
 import soundfile as sf
-
-# ── Rutas ──────────────────────────────────────────────────────────────────────
-ROOT       = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
-BCGD_DIR   = os.path.join(ROOT, "BCGD")
-DATA_RAW   = os.path.join(ROOT, "data", "raw")
-DATA_PROC  = os.path.join(ROOT, "data", "processed")
-PLOTS_DIR  = os.path.join(ROOT, "data", "processed")
 
 sys.path.insert(0, BCGD_DIR)
 from algoritmoBCGDUnificado import bcgd_matrix_factorization
 
 os.makedirs(DATA_PROC, exist_ok=True)
 
-# ══════════════════════════════════════════════════════════════════════════════
-# BLOQUE 0 — Sanity Check: verificación numérica del gradiente
-# ══════════════════════════════════════════════════════════════════════════════
+# Rutas
+ROOT       = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+BCGD_DIR   = os.path.join(ROOT, "BCGD")
+DATA_RAW   = os.path.join(ROOT, "data", "raw")
+DATA_PROC  = os.path.join(ROOT, "data", "processed")
+PLOTS_DIR  = os.path.join(ROOT, "data", "processed")
+
+
+
+
+# BLOQUE 0 Sanity Check: verificación numérica del gradiente ---------------------------------------
+
 def sanity_check():
-    print("\n" + "="*52)
-    print("  BLOQUE 0 — Sanity Check del Gradiente")
-    print("="*52)
+    print("  BLOQUE 0 Sanity Check del Gradiente")
 
     m, n, k = 2, 2, 1
     X = np.array([[5., 3.], [2., 4.]])
@@ -76,19 +61,17 @@ def sanity_check():
     print(f"  Error Relativo      : {error_relativo:.8e}")
 
     if error_relativo < 1e-4:
-        print("  RESULTADO: ✓ ÉXITO — Error relativo < 1e-4")
+        print("  RESULTADO: ÉXITO — Error relativo < 1e-4")
     else:
-        print("  RESULTADO: ✗ ERROR — Revisar la derivación")
+        print("  RESULTADO: ERROR — Revisar la derivación")
         sys.exit(1)
 
 
-# ══════════════════════════════════════════════════════════════════════════════
-# BLOQUE 1 — Pipeline DSP: mezcla, STFT y split temporal
-# ══════════════════════════════════════════════════════════════════════════════
+
+# BLOQUE 1 Pipeline DSP: mezcla, STFT y split temporal ---------------------------------------------
+
 def pipeline_dsp():
-    print("\n" + "="*52)
-    print("  BLOQUE 1 — Pipeline DSP")
-    print("="*52)
+    print("  BLOQUE 1 Pipeline DSP")
 
     speech_path = os.path.join(DATA_RAW, "ejemplo_voz.wav")
     noise_path  = os.path.join(DATA_RAW, "ejemplo_ruido.wav")
@@ -132,16 +115,11 @@ def pipeline_dsp():
     return X_train, X_val, X_test, X_phase
 
 
-# ══════════════════════════════════════════════════════════════════════════════
-# BLOQUE 2 — Algorithm 2: evaluar H con W fijo (GD proyectado puro)
-# ══════════════════════════════════════════════════════════════════════════════
+
+# BLOQUE 2 Algorithm 2: evaluar H con W fijo (GD proyectado puro) ----------------------------------
+
 def solve_H_eval(W_fixed, X_eval, k, steps=300, alphaH=1e-3):
-    """
-    Algorithm 2 del enunciado.
-        g      <- W^T (W H_eval - X_eval)
-        H_eval <- max(H_eval - alphaH * g, 0)
-    GD proyectado puro, sin momentum ni Nesterov.
-    """
+
     k_dim, T_eval = W_fixed.shape[1], X_eval.shape[1]
     np.random.seed(42)
     H_eval = np.random.uniform(0, 1 / np.sqrt(k), (k_dim, T_eval))
@@ -158,13 +136,9 @@ def compute_rmse(X, W, H):
     return np.linalg.norm(X - W @ H, "fro") / np.sqrt(F * T)
 
 
-# ══════════════════════════════════════════════════════════════════════════════
-# BLOQUE 3 — Entrenamiento con los 3 optimizadores (k=10)
-# ══════════════════════════════════════════════════════════════════════════════
+# BLOQUE 3 Entrenamiento con los 3 optimizadores (k=10) --------------------------------------------
 def entrenar_y_evaluar(X_train, X_val, X_test):
-    print("\n" + "="*52)
-    print("  BLOQUE 2 — Entrenamiento y Evaluación (k=10)")
-    print("="*52)
+    print("  BLOQUE 2 Entrenamiento y Evaluación (k=10)")
 
     k           = 10
     steps_train = 500
@@ -211,7 +185,6 @@ def entrenar_y_evaluar(X_train, X_val, X_test):
 
     # Resumen
     print(f"\n  {'Método':<12} {'RMSE Train':>12} {'RMSE Val':>10} {'RMSE Test':>10}")
-    print("  " + "-"*46)
     for m in methods:
         r = results[m]
         print(f"  {m:<12} {r['rmse_train']:>12.6f} {r['rmse_val']:>10.6f} {r['rmse_test']:>10.6f}")
@@ -232,10 +205,9 @@ def entrenar_y_evaluar(X_train, X_val, X_test):
     return results
 
 
-# ══════════════════════════════════════════════════════════════════════════════
-# BLOQUE 4 — Experimentos: barrido de k y gráficas
-# ══════════════════════════════════════════════════════════════════════════════
+# BLOQUE 4 Experimentos: barrido de k y gráficas ---------------------------------------------------
 def entrenar_con_controles(X, k, steps, alphaW, alphaH, method):
+    
     W, H, loss_history = bcgd_matrix_factorization(
         X=X, k=k, steps=steps, alphaW=alphaW, alphaH=alphaH,
         method=method, lambd=0.0
@@ -257,9 +229,7 @@ def entrenar_con_controles(X, k, steps, alphaW, alphaH, method):
 
 
 def experimentos_y_graficas(X_train, X_val, results_k10):
-    print("\n" + "="*52)
-    print("  BLOQUE 3 — Experimentos (k ∈ {5,10,15,20}) y Gráficas")
-    print("="*52)
+    print("  BLOQUE 3 Experimentos (k ∈ {5,10,15,20}) y Gráficas")
 
     sns.set_theme(style="whitegrid", palette="muted")
     plt.rcParams.update({
@@ -293,7 +263,7 @@ def experimentos_y_graficas(X_train, X_val, results_k10):
             }
             print(f"    {metodo.upper():<10} [{motivo}]  RMSE val: {rmse_val:.4f}")
 
-    # ── Gráfica 1: Pérdida vs iteración (k=10) ─────────────────────────────
+    # Gráfica 1: Pérdida vs iteración (k=10)
     k_viz = 10
     fig, ax = plt.subplots(figsize=(10, 6))
     ax.plot(resultados[k_viz]["gd"]["loss_history"],
@@ -312,7 +282,7 @@ def experimentos_y_graficas(X_train, X_val, results_k10):
     plt.close(fig)
     print("\n  ✓ Gráfica guardada: loss_vs_iter.png")
 
-    # ── Gráfica 2+3: Heatmaps W y H (Nesterov, k=10) ──────────────────────
+    # Gráfica 2-3: Heatmaps W y H (Nesterov, k=10)
     W_best = resultados[k_viz]["nesterov"]["W"]
     H_best = resultados[k_viz]["nesterov"]["H"]
     fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(16, 6))
@@ -329,7 +299,7 @@ def experimentos_y_graficas(X_train, X_val, results_k10):
     plt.close(fig)
     print("  ✓ Gráfica guardada: bases_activaciones.png")
 
-    # ── Gráfica 4: Val RMSE vs k ───────────────────────────────────────────
+    # Gráfica 4: Val RMSE vs k
     k_list       = sorted(resultados.keys())
     rmse_val_gd  = [resultados[k]["gd"]["rmse_val"]       for k in k_list]
     rmse_val_mom = [resultados[k]["momentum"]["rmse_val"]  for k in k_list]
@@ -373,13 +343,9 @@ def experimentos_y_graficas(X_train, X_val, results_k10):
     return resultados
 
 
-# ══════════════════════════════════════════════════════════════════════════════
-# BLOQUE 5 — Reconstrucción del audio separado con el mejor modelo
-# ══════════════════════════════════════════════════════════════════════════════
+# BLOQUE 5 Reconstrucción del audio separado con el mejor modelo -----------------------------------
 def reconstruir_audio(results_k10, X_phase):
-    print("\n" + "="*52)
-    print("  BLOQUE 4 — Reconstrucción de Audio")
-    print("="*52)
+    print("  BLOQUE 4 Reconstrucción de Audio")
 
     best = min(results_k10, key=lambda m: results_k10[m]["rmse_val"])
     W    = results_k10[best]["W"]
@@ -400,16 +366,14 @@ def reconstruir_audio(results_k10, X_phase):
 
     out_path = os.path.join(DATA_PROC, "audio_separado.wav")
     sf.write(out_path, audio_reconstruido, 16000)
-    print(f"  ✓ Audio reconstruido guardado: audio_separado.wav")
+    print(f"   Audio reconstruido guardado: audio_separado.wav")
     print(f"    Método usado: {best.upper()}")
 
 
-# ══════════════════════════════════════════════════════════════════════════════
+
 # EJECUCIÓN DEL PIPELINE COMPLETO
-# ══════════════════════════════════════════════════════════════════════════════
-print("\n" + "█"*52)
+
 print("  PROYECTO C — Audio NMF  |  Pipeline Completo")
-print("█"*52)
 
 # 0. Sanity check
 sanity_check()
@@ -426,9 +390,8 @@ experimentos_y_graficas(X_train, X_val, results_k10)
 # 4. Reconstruir audio con el mejor modelo
 reconstruir_audio(results_k10, X_phase)
 
-print("\n" + "█"*52)
+
 print("  Pipeline completado. Resultados en data/processed/")
-print("█"*52)
 print("\n  Archivos generados:")
 for f in sorted(os.listdir(DATA_PROC)):
     print(f"    {f}")
