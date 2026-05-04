@@ -47,22 +47,20 @@ PROYECTO_NMF_AUDIO/
 ```
 Requisitos
 ----------
-Python 3.9 o superior.
 
 Instalar dependencias:
-
+```
     pip install numpy librosa soundfile matplotlib seaborn
+```
 
-Las siguientes librerias de Python estandar tambien se usan y no requieren
-instalacion adicional: os, sys, math.
 
 Se recomienda usar un entorno virtual:
-
+```
     python -m venv .venv
     source .venv/bin/activate        (Linux / Mac)
     .venv\Scripts\activate           (Windows)
     pip install numpy librosa soundfile matplotlib seaborn
-
+```
 
 Como Correr el Proyecto (pipeline completo)
 -------------------------------------------
